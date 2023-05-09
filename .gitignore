@@ -1,0 +1,67 @@
+# compiled output
+media-backend-nestjs/dist
+media-backend-nestjs/node_modules
+media-backend-nestjs/.git
+
+# Logs
+media-backend-nestjs/logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+media-backend-nestjs/.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.DS_Store
+media-frontend-vuejs/node_modules
+media-frontend-vuejs/.DS_Store
+media-frontend-vuejs/dist
+dist-ssr
+coverage
+*.local
+
+media-frontend-vuejs/cypress/videos/
+media-frontend-vuejs/cypress/screenshots/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
