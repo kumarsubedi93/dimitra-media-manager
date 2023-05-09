@@ -32,7 +32,7 @@ export default {
                         img.src = URL.createObjectURL(file);
                         return new Promise((resolve, reject) => {
                             img.onload = () => {
-                                if (img.width < 1080) {
+                                if (img.width < 1920 || img.height < 1080) {
                                     reject("Image should be at least 1080p");
                                 } else if (file.size > 3 * 1024 * 1024) {
                                     reject("Image should not be greater than 3MB");
