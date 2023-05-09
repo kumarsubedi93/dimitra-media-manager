@@ -43,14 +43,6 @@ export class MediaController {
         })
     }
 
-    @Get('media/download/:id')
-    async download(@Param() param, @Res() res: Response) {
-        const media = await this.mediaService.findById(param.id)
-        const file = readFileSync(join(__dirname, '../../uploads', media.file));
-        res.contentType('blob')
-        res.status(HttpStatus.OK).send(file)
-    }
-
 
     @Delete('delete-media/:id')
     async deleteMedia(@Param() param: any, @Res() res: Response) {
