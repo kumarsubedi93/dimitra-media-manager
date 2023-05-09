@@ -17,16 +17,13 @@
 
 ### Before Start
 ```
-Before installing the node module package please make sure your computer or server must have ffmpeg multimedia frameworrk because inside this project fluent-ffmpeg package used.
+Before installing the node module package please make sure your computer or server
+must have ffmpeg multimedia framework because inside this project fluent-ffmpeg package used.
 
 Vist below about ffmpeg 
 https://ffmpeg.org/download.html
 
 ```
-## Screnshoot
-
-
-
 
 ## Installation
 
