@@ -24,6 +24,9 @@ export class MaxFileSizeValidatorForJPEG extends FileValidator<{inputwidth:numbe
         writeFileSync(filePath, file.buffer);
         return new Promise((resolve, reject) => {
             ffprobe(filePath, (err, metadata) => {
+                if(err){
+                    resolve('error')
+                }
                 const { width, height } = metadata.streams[0];
                 console.log(width, height)
                 if(width < this.validationOptions.inputwidth || height < this.validationOptions.inputHeight){
