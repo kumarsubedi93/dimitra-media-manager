@@ -1,4 +1,5 @@
 <script>
+import { emitter } from '../bus/global-event-bus'
 export default {
     name: 'input-element',
     props: {
@@ -14,7 +15,7 @@ export default {
             type: Number
         }
     },
-    data: () => {
+    data() {
         return {
             file: null,
             fileRules: [
@@ -78,8 +79,15 @@ export default {
                     }
                     return true;
                 },
-            ]
+            ],
+            modelFileValue:this.inputValue
         }
+    },
+    mounted(){
+        const that = this
+        emitter.on('saveFile', (res) => {
+            that.modelFileValue = null
+        })
     },
     methods: {
         handleFileUpload(event) {
@@ -92,7 +100,7 @@ export default {
                         })
                     }
                 })
-            })
+            })  
         },
         clearHandler() {
             this.$emit('fileUploadInput', {
@@ -107,7 +115,7 @@ export default {
 <template>
     <div class="wrapper">
         <div class="file-input-elements">
-            <v-file-input :rules="fileRules" ref="fileInput" show-size @click:clear="clearHandler"
+            <v-file-input :rules="fileRules" v-model="modelFileValue" :clearable="true" ref="fileInput" show-size @click:clear="clearHandler"
                 @change="handleFileUpload($event)" placeholder="Pick an avatar" prepend-icon="mdi-camera" label="Media">
             </v-file-input>
 

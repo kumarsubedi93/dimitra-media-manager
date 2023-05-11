@@ -1,6 +1,7 @@
 <script>
 import InputElement from './InputElement.vue'
 import { API_CLIENT, BASE_URL } from '../services/http'
+import { emitter } from '../bus/global-event-bus'
 
 export default {
     name: 'upload-file',
@@ -12,6 +13,7 @@ export default {
             }],
             loading: false,
             outputFiles: [],
+            gError:''
         }
     },
     components: {
@@ -52,10 +54,7 @@ export default {
             }).catch(err => err)
         },
         initialFileInput() {
-            return this.files = [{
-                value: '',
-                initial: true
-            }]
+             
         },
         getFiles() {
             API_CLIENT.get('/api/medias').then(res => {
@@ -82,10 +81,12 @@ export default {
             this.files[params.index].value = params.value
         },
         saveFile() {
+            this.gError = ''
             const isValidForm = this.files.every(x => {
                 return x.value
             })
             if (!isValidForm) {
+                this.gError = 'Please fill the form properly.'
                 return;
             }
 
@@ -97,7 +98,11 @@ export default {
             API_CLIENT.post('/api/upload', formData).then(res => {
                 this.getFiles()
                 this.loading = false
-                this.files = this.initialFileInput()
+                this.files = [{
+                    value: '',
+                    initial: true
+                }]
+                emitter.emit('saveFile', true)
             }).catch(err => {
                 this.loading = false
             })
@@ -147,9 +152,14 @@ audio::-webkit-media-controls-panel {
                 <v-card title="Upload Files">
                     <v-card-item>
                         <InputElement v-for="(file, index)  in files" v-bind:initial="file.initial"
-                            v-bind:inputValue="file.value" v-bind:index="index" v-bind:key="index"
-                            @addMoreFile="addMoreFile" @removeFile="removeFile" @fileUploadInput="handleFileUploadInput">
+                            v-bind:inputValue="[]" v-bind:index="index" v-bind:key="index"
+                            @addMoreFile="addMoreFile"
+                            @removeFile="removeFile" @fileUploadInput="handleFileUploadInput">
                         </InputElement>
+                        <div class="err" v-if="gError">
+                            <v-alert icon="$error" color="error" :title="gError"> </v-alert>
+                        </div>  
+                        <br>
                         <v-btn variant="tonal" :loading="loading" @click="saveFile" prepend-icon="mdi-check-circle">
                             Save
                             <template v-slot:loader>
