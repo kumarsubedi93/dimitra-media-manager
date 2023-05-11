@@ -21,18 +21,18 @@ export default {
                 value => !!value[0] || "File is required",
                 value => {
                     if (!value || !value[0]) return true;
-                    const allowedExtensions = ["jpeg", "png", "mp4", "mp3"];
+                    const allowedExtensions = ["jpeg", "jpg", "png", "mp4", "mp3"];
                     const file = value[0]
                     const fileExtension = file.name.split(".").pop().toLowerCase();
                     if (!allowedExtensions.includes(fileExtension)) {
                         return "Invalid file type. Only JPEG, PNG, MP4 and MP3 files are allowed.";
                     }
-                    if (fileExtension === "jpeg") {
+                    if (fileExtension === "jpeg" || fileExtension === 'jpg') {
                         const img = new Image();
                         img.src = URL.createObjectURL(file);
                         return new Promise((resolve, reject) => {
                             img.onload = () => {
-                                if (img.width < 1080) {
+                                if (img.width < 1920 || img.height < 1080 ) {
                                     reject("Image should be at least 1080p");
                                 } else if (file.size > 3 * 1024 * 1024) {
                                     reject("Image should not be greater than 3MB");

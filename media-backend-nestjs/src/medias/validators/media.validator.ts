@@ -1,6 +1,7 @@
 
 import { FileValidator } from '@nestjs/common'
-import { writeFile, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
+const os = require('os');
 import {ffprobe}  from 'fluent-ffmpeg'
 
 
@@ -18,16 +19,19 @@ export class MaxFileSizeValidatorForJPEG extends FileValidator<{inputwidth:numbe
         if(in_mb >= this.validationOptions.maxSize){
             return false
         }
-        const filePath = '/tmp/temp-jpeg-10.jpeg';
+        const filePath = `${os.tmpdir()}/temp-jpeg-10.jpeg`;
+        
         writeFileSync(filePath, file.buffer);
         return new Promise((resolve, reject) => {
             ffprobe(filePath, (err, metadata) => {
                 const { width, height } = metadata.streams[0];
+                console.log(width, height)
                 if(width < this.validationOptions.inputwidth || height < this.validationOptions.inputHeight){
                    resolve('error')
+                }else{
+                    resolve('success')
                 }
             })
-            resolve('success')
         }).then(res => {
             if(res == 'error'){
                 return false
@@ -38,7 +42,7 @@ export class MaxFileSizeValidatorForJPEG extends FileValidator<{inputwidth:numbe
         })
     }
     buildErrorMessage(): string {
-        return `File uploaded is too big. Max size is (${this.validationOptions.maxSize} MB) and resolution at least 1080p`
+        return `The max size is (${this.validationOptions.maxSize} MB) and resolution at least 1080p`
     }
 }
 
@@ -53,28 +57,22 @@ export class ResolutionValidatorForMp4 extends FileValidator<{inputwidth:number,
             return  true
         }
         const inputDuration = this.validationOptions.duration 
-        const filePath = '/tmp/temp-jpeg-5.mp4';
+        const filePath = `${os.tmpdir()}/temp-jpeg-5.mp4`;
+        
         writeFileSync(filePath, file.buffer);
         return new Promise((resolve, reject)=> {
             ffprobe(filePath, (err, metadata) => {
                 if (err) {
                     resolve('error')
                 }
-                const { width, height } = metadata.streams[0];
-                if (width < this.validationOptions.inputwidth || height < this.validationOptions.inputHeight) {
-                    resolve('error')
-                }
-            })
-            ffprobe(filePath, (err, metadata) => {
-                if (err) {
-                    resolve('error')
-                }
                 const { duration } = metadata.format;
-                if (duration > inputDuration) {
+                const { width, height } = metadata.streams[0];
+                if ((width < this.validationOptions.inputwidth || height < this.validationOptions.inputHeight) || duration > inputDuration) {
                     resolve('error')
+                }else{
+                    resolve('success')
                 }
             })
-            resolve('success')
         }).then(res => {
             if(res === 'error'){
                 return false
@@ -99,7 +97,7 @@ export class Mp3DurationValidator extends FileValidator<{ duration:number }>{
         if(file.mimetype != 'audio/mpeg'){
             return  true
         }
-        const filePath = '/tmp/temp-jpeg-5.mp3';
+        const filePath = `${os.tmpdir()}/temp-sp.mp3`;
         writeFileSync(filePath, file.buffer);
         return new Promise((resolve,  reject) => {
             ffprobe(filePath, (err, metadata) => {
@@ -109,9 +107,10 @@ export class Mp3DurationValidator extends FileValidator<{ duration:number }>{
                 const { duration } = metadata.format;
                 if (duration > this.validationOptions.duration) {
                     resolve('error')
+                }else{
+                    resolve('success')
                 }
-            })  
-            resolve('success')
+            }) 
         }).then(res => {
             if(res == 'error'){
                 return false

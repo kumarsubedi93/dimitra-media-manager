@@ -23,17 +23,17 @@ export default {
     computed: {
         images() {
             return this.outputFiles.filter(item => {
-                return !item.file.includes('mp3') && !item.file.includes('mp4')
+                return !item.file.includes('.mp3') && !item.file.includes('.mp4')
             })
         },
         mp3s() {
             return this.outputFiles.filter(item => {
-                return item.file.includes('mp3')
+                return item.file.includes('.mp3')
             })
         },
         mp4s() {
             return this.outputFiles.filter(item => {
-                return item.file.includes('mp4')
+                return item.file.includes('.mp4')
             })
         }
     },

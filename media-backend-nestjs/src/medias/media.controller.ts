@@ -7,8 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createWriteStream, readFileSync } from 'fs';
 import { MaxFileSizeValidatorForJPEG, ResolutionValidatorForMp4, Mp3DurationValidator } from './validators/media.validator'
 
-function uploadMultipleFiles(files, mediaService: MediaService) {
-    console.log('Writeeerr')
+const uploadMultipleFiles  =  (files, mediaService: MediaService) => {
     return new Promise(async (resolve, reject) => {
         for (let i = 0; i < files.length; i++) {
             const file = files[i]
@@ -36,7 +35,7 @@ export class MediaController {
 
     @Get('medias')
     async getAllMedia(@Res() res: Response) {
-        const medias = await this.mediaService.getAlll()
+        const medias = await this.mediaService.getAll()
         return res.status(HttpStatus.OK).json({
             message: 'Data fetched',
             data: medias
@@ -63,8 +62,8 @@ export class MediaController {
                     fileType: /(jpeg|png|mp4|mpeg)$/,
                 }).addValidator(
                     new MaxFileSizeValidatorForJPEG({
-                        inputwidth: 1280,
-                        inputHeight: 720,
+                        inputwidth: 1920,
+                        inputHeight: 1080,
                         maxSize: 3
                     })
                 ).addValidator(

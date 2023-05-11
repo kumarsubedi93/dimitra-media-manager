@@ -13,7 +13,7 @@ export class MediaService {
     private mediaRepo: Repository<Media>,
   ) {}
 
-  getAlll(): Promise<Media[]> {
+  getAll(): Promise<Media[]> {
     return this.mediaRepo.find();
   }
 
