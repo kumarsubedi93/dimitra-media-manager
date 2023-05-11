@@ -89,7 +89,6 @@ export default {
                 this.gError = 'Please fill the form properly.'
                 return;
             }
-
             const formData = new FormData()
             this.files.forEach((file, index) => {
                 formData.append(`file`, file.value);
@@ -105,6 +104,11 @@ export default {
                 emitter.emit('saveFile', true)
             }).catch(err => {
                 this.loading = false
+                if(err.response.data.statusCode == 422){
+                  this.gError = err.response.data.message
+                }else{
+                    this.gError = 'Server error.'
+                }
             })
         },
         fileUrl(file) {
